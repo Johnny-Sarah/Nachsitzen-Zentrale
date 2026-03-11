@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nachsitzenzentrale - Eingabe</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #3498db; color: white; border: none; padding: 15px; width: 100%; margin-top: 20px; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background-color: #2980b9; }
+        .success { color: green; display: none; margin-top: 15px; text-align: center; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Sieben Brücken Schule</h1>
+    <h2 style="text-align: center; color: #7f8c8d;">Eintrag: Nachsitzen</h2>
+    
+    <form id="nachsitzenForm">
+        <label for="schueler">1. Welcher Schüler/welche Schülerin muss nachsitzen?</label>
+        <input type="text" id="schueler" required placeholder="Name des Schülers/der Schülerin">
+
+        <label for="lehrer">2. Welcher Lehrer hat sich dafür entschieden?</label>
+        <input type="text" id="lehrer" required placeholder="Name der Lehrkraft">
+
+        <label for="grund">3. Grund der Entscheidung?</label>
+        <textarea id="grund" rows="3" required placeholder="Bitte Grund angeben..."></textarea>
+
+        <label for="datum">4a. Datum des Ereignisses</label>
+        <input type="date" id="datum" required>
+
+        <label for="pause">4b. In welcher Pause/Stunde?</label>
+        <input type="text" id="pause" required placeholder="z.B. 1. große Pause">
+
+        <label for="dauer">5. Wie lange muss nachgesessen werden?</label>
+        <input type="text" id="dauer" required placeholder="z.B. 45 Minuten, 1 Stunde...">
+
+        <label for="aufgaben">6. Welche Aufgaben müssen bearbeitet werden?</label>
+        <textarea id="aufgaben" rows="3" required placeholder="Aufgabenbeschreibung..."></textarea>
+
+        <button type="submit">Eintrag speichern</button>
+        <div id="successMessage" class="success">Eintrag erfolgreich gespeichert!</div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('nachsitzenForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Verhindert das Neuladen der Seite
+
+        // Daten aus dem Formular holen
+        const neuerEintrag = {
+            id: Date.now(), // Eindeutige ID generieren
+            schueler: document.getElementById('schueler').value,
+            lehrer: document.getElementById('lehrer').value,
+            grund: document.getElementById('grund').value,
+            datum: document.getElementById('datum').value,
+            pause: document.getElementById('pause').value,
+            dauer: document.getElementById('dauer').value,
+            aufgaben: document.getElementById('aufgaben').value,
+            erledigt: false // Standardmäßig nicht erledigt
+        };
+
+        // Bisherige Einträge laden oder leeres Array erstellen
+        let eintraege = JSON.parse(localStorage.getItem('nachsitzenDaten')) || [];
+        
+        // Neuen Eintrag hinzufügen und speichern
+        eintraege.push(neuerEintrag);
+        localStorage.setItem('nachsitzenDaten', JSON.stringify(eintraege));
+
+        // Formular leeren und Erfolgsmeldung zeigen
+        document.getElementById('nachsitzenForm').reset();
+        document.getElementById('successMessage').style.display = 'block';
+        setTimeout(() => { document.getElementById('successMessage').style.display = 'none'; }, 3000);
+    });
+</script>
+
+</body>
+</html>
